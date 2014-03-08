@@ -32,12 +32,13 @@ void loop()
   while (digitalRead(2) != 0)
   {
     // Keep generating random values. Only on button press do we lock in the values.
-    facter = random(1001, 1021)/1000.0;
-    starter = random(3141)/1000.0;
+    // The random seed is not random enough, so this provides a more random result.
+    facter = random(1001, 1021)/1000.0; // Increase the second number for variation.
+    starter = random(3141)/1000.0; // offset the starting point by 0-3.141 radians
     delay(10);
   }
 
-  // Main loop, to 90% decay.
+  // Main loop, to 90% decay in amplitude of the movements.
   for(pos = 0; pos < decay*0.9; pos += 1)
   {  
     // Adjx just gives me a nice sine wave
