@@ -18,16 +18,16 @@ float decay = 60000; // Gives the amount of steps to run on. Higher gives a slow
 
 void setup() 
 { 
-  servox.attach(9);  // attaches the servo on pin 9 to the servo object
-  servoy.attach(10);  // attaches the servo on pin 10 to the servo object
-  pinMode(2, INPUT_PULLUP); // Starting button input
+  servox.attach(6);  // attaches the servo on pin 9 to the servo object
+  servoy.attach(7);  // attaches the servo on pin 10 to the servo object
+  pinMode(3, INPUT_PULLUP); // Starting button input
   randomSeed(analogRead(0)); // Just seed with a random value
 } 
 
 void loop() 
 { 
     // Wait for a button press.
-    while (digitalRead(2) != 0)
+    while (digitalRead(3) != 0)
     {
         // Keep generating random values. Only on button press do we lock in the values.
         // The random seed is not random enough, so this provides a more random result.
