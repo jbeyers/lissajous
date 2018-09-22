@@ -27,31 +27,41 @@ void setup() {
   servox.attach(6);  // attaches the servo on pin 9 to the servo object
   servoy.attach(7);  // attaches the servo on pin 10 to the servo object
   pinMode(3, INPUT_PULLUP); // Starting button input
-  Serial.begin(9600);
+//  Serial.begin(9600);
+  randomSeed(analogRead(0));
+  servox.write(90);
+  servoy.write(90);
 } 
 
 void loop() { 
   // Wait for a button press.
   while (digitalRead(3) != 0) {
-    if (Serial.available() > 0 ) {
-      facter = Serial.parseFloat();
-      starter = Serial.parseFloat();
-      circle_size = Serial.parseFloat();
-      circle_speed = Serial.parseFloat();
-      circle_start = Serial.parseFloat();
-      min_x = Serial.parseFloat();
-      min_y = Serial.parseFloat();
-      scale = Serial.parseFloat();
-      Serial.print(facter);
-      Serial.println();
-    }
-    servox.write(90);
-    servoy.write(90);
-  }
+//    if (Serial.available() > 0 ) {
+//      facter = Serial.parseFloat();
+//      starter = Serial.parseFloat();
+//      circle_size = Serial.parseFloat();
+//      circle_speed = Serial.parseFloat();
+//      circle_start = Serial.parseFloat();
+//      min_x = Serial.parseFloat();
+//      min_y = Serial.parseFloat();
+//      scale = Serial.parseFloat();
+//      Serial.print(facter);
+//      Serial.println();
 
+    facter = random(3)/1.0 + 1.0 + random(301)/10000.0;
+    starter = random(315)/100.0;
+    circle_size = random(20, 100)/100.0;
+    circle_speed = random(4)/1.0 - 0.05 + random(101)/1000.0;
+    circle_start = random(315)/100.0;
+    min_x = 0.0;
+    min_y = 0.0;
+    scale = 1.5;
+  }
+  servox.write(90);
+  servoy.write(90);
+  delay(5000);
   // Main loop, to 90% decay in amplitude of the movements.
-  first_loop = true;
-  decay = 60000;
+  decay = 60000.0;
 
   for(pos = int(decay*0.1); pos < decay; pos += 1)
   {  
@@ -64,12 +74,6 @@ void loop() {
     servox.write(adjx);
     servoy.write(adjy);
 
-    // This gives us time to drop the pen
-    if (first_loop) {
-      first_loop = false;
-    }
-
     delay(1); // Just for consistent speed.
   } 
-  delay(5000);
 }
