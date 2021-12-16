@@ -121,7 +121,7 @@ def test():
     decay = 100000 + int(random.random() * 100000)
     prevx = 512
     prevy = 512
-    for pos in range(decay/20, decay):
+    for pos in range(decay//20, decay):
         adjx = int(512 + int(256 * (pos/float(decay)) * math.sin(pos * spd)))
         adjy = int(512 + int(256 * (pos/float(decay)) * math.cos(starter + (pos * spd * facter))))
         adjx += int(256 * (pos/float(decay)) * math.sin(starter2 + (pos * spd*facter2)))
