@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, render_template, request, redirect
 import svgwrite
 from svgwrite.shapes import Polyline, Line
 import math
@@ -10,17 +10,16 @@ import random
 app = Flask(__name__)
 app.config.from_object(__name__)
 
-def harmonograph(multiplier, offset, starter, circle_size, circle_speed, circle_offset, circle_start):
+def harmonograph(ratio, starter, circle_size, circle_speed, circle_offset, circle_start):
     pos = 0
     spd = 0.05
     decay = 6000
-    factor = multiplier + offset
     circle_factor = circle_speed + circle_offset
     min_x = max_x = min_y = max_y = prev_x = prev_y = 400
     points = []
     for pos in range(decay//10, decay):
         adjx = int(400 + int(200 * (pos/float(decay)) * math.sin(pos * spd)))
-        adjy = int(400 + int(200 * (pos/float(decay)) * math.sin(starter + (pos * spd * factor))))
+        adjy = int(400 + int(200 * (pos/float(decay)) * math.sin(starter + (pos * spd * ratio))))
         adjx += int(circle_size * 200 * (pos/float(decay)) * math.sin(circle_start + (pos * spd * circle_factor)))
         adjy += int(circle_size * 200 * (pos/float(decay)) * math.cos(circle_start + (pos * spd * circle_factor)))
         points.append((adjx, adjy))
@@ -35,7 +34,7 @@ def harmonograph(multiplier, offset, starter, circle_size, circle_speed, circle_
 
 
     # ser = serial.Serial('/dev/ttyACM0', 9600)
-    # tosend = f'{factor} {starter} {circle_size} {circle_factor} {circle_start} {x_offset} {y_offset} {scale:.4f}'
+    # tosend = f'{ratio} {starter} {circle_size} {circle_factor} {circle_start} {x_offset} {y_offset} {scale:.4f}'
     # print(tosend)
     # ser.write(tosend.encode('utf-8'))
 
@@ -53,8 +52,7 @@ def harmonograph(multiplier, offset, starter, circle_size, circle_speed, circle_
 
 def random_image():
     params = {
-    "multiplier":random.randint(1, 3),
-    "offset":random.uniform(0.0, 0.03),
+    "ratio":float(random.randint(1, 3)) + random.uniform(-0.03, 0.03),
     "starter":random.uniform(0.0, 3.142),
     "circle_size":random.uniform(0.0, 1.0),
     "circle_speed":random.uniform(0.0, 3.0),
@@ -67,9 +65,22 @@ def random_image():
 
 @app.route('/', methods=['GET'])
 def home():
-    # return "<p>Hello, World!</p>"
+    if 'ratio' in request.args:
+        values = []
+        for k in ['ratio', 'starter', 'circle_size', 'circle_speed', 'circle_offset', 'circle_start']:
+            v =  request.args.get(k)
+            values.append('%.7g' % float( v ))
+        line = '{' + ', '.join(values) + '},\n'
+        with open('values.txt', 'a') as f:
+            f.write(line)
+
+        return redirect('/')
+
+
     params, drawing = random_image()
-    return drawing
+    # return drawing
+    url_params = '&'.join(f'{k}={v}' for k, v in params.items())
+    return render_template("index.html", drawing=drawing, url_params=url_params)
 
 
 if __name__ == '__main__':

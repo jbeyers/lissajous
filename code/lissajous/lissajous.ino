@@ -23,6 +23,19 @@ float min_x;
 float min_y;
 bool first_loop;
 
+// Known good combos of params: These will generate nice-looking lissajous figures.
+//p
+    "multiplier":random.randint(1, 3),
+    "offset":random.uniform(0.0, 0.03),
+    "starter":random.uniform(0.0, 3.142),
+    "circle_size":random.uniform(0.0, 1.0),
+    "circle_speed":random.uniform(0.0, 3.0),
+    "circle_offset":random.uniform(-0.05, 0.05),
+    "circle_start":random.uniform(0.0, 3.142),
+int known_good_params[][] ={
+  {}
+};
+
 void setup() { 
   servox.attach(6);  // attaches the servo on pin 9 to the servo object
   servoy.attach(7);  // attaches the servo on pin 10 to the servo object
