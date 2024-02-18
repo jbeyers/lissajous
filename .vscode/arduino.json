@@ -1,0 +1,5 @@
+{
+    "board": "arduino:avr:uno",
+    "sketch": "code/lissajous/lissajous.ino",
+    "port": "/dev/ttyACM0"
+}
