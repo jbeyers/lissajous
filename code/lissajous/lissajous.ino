@@ -201,6 +201,7 @@ void loop() {
     min_x = 0.0;
     min_y = 0.0;
     scale = 1.5;
+    params_index = random(151);
   }
   // We might want to skip this bit to produce fully random ones.
   // ratio, starter, circle_size, circle_speed, circle_offset, circle_start
@@ -209,7 +210,6 @@ void loop() {
   circle_size = pgm_read_float(&(known_good_params[params_index][2]));
   circle_speed = pgm_read_float(&(known_good_params[params_index][3])) + pgm_read_float(&(known_good_params[params_index][4]));
   circle_start = pgm_read_float(&(known_good_params[params_index][5]));
-  params_index += 1;
 
   servox.write(90);
   servoy.write(90);
